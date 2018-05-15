@@ -1,2 +1,2 @@
-# Lotech.Data
-Mini Orm "EntLib like "
+# Lotech.Data.Core
+Lotech.Data for dotnet core
