@@ -48,16 +48,16 @@ namespace Lotech.Data.Operations.Common
             Func<IDatabase, TEntity, TEntity> IOperationProvider<Func<IDatabase, TEntity, TEntity>>.Create(EntityDescriptor descriptor)
             {
                 if (descriptor.Keys == null || descriptor.Keys.Length == 0)
-                    return (db, _) => throw new InvalidOperationException("仅支持具备主键数据表的加载操作.");
+                    throw new InvalidOperationException("仅支持具备主键数据表的加载操作.");
 
                 var keys = descriptor.Keys.Select((key, index) =>
-                        new
-                        {
-                            Name = quote(key.Name),
+                        new MemberDescriptorContainer<TEntity>
+                        (
+                            quote(key.Name),
+                            buildParameter("p_sql_" + index),
                             key.DbType,
-                            ParameterName = buildParameter("p_sql_" + index),
-                            Get = Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
-                        }).ToArray();
+                            Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
+                        )).ToArray();
 
                 var sql = string.Concat("SELECT "
                                         , string.Join(", ", descriptor.Members.Select(_ => quote(_.Name)))
@@ -72,7 +72,7 @@ namespace Lotech.Data.Operations.Common
                     {
                         foreach (var key in keys)
                         {
-                            db.AddInParameter(command, key.ParameterName, key.DbType, key.Get(entity));
+                            db.AddInParameter(command, key.ParameterName, key.DbType, key.Getter(entity));
                         }
                         return db.ExecuteEntity<TEntity>(command);
                     }

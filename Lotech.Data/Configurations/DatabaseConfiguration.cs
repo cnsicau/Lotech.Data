@@ -18,11 +18,6 @@ namespace Lotech.Data.Configurations
         /// 连接串配置节名称
         /// </summary>
         internal const string ConnectionStringsName = "connectionStrings";
-        
-        /// <summary>
-        /// DB驱动工厂配置节名称
-        /// </summary>
-        internal const string DbProviderFactoriesName = "dbProviderFactories";
 
         /// <summary>
         /// 
@@ -37,20 +32,12 @@ namespace Lotech.Data.Configurations
                 .Build();
 
             var connections = new ConnectionStringSettingsCollection();
-            configuration.Bind(ConnectionStringsName, connections);
+            configuration.GetSection(ConnectionStringsName).Bind(connections);
             ConnectionStrings = connections;
 
             var settings = new DatabaseSettings();
-            configuration.Bind(DatabaseSettingsName, settings);
+            configuration.GetSection(DatabaseSettingsName).Bind(settings);
             DatabaseSettings = settings;
-
-            var providers = new Dictionary<string, string>();
-            configuration.Bind(DbProviderFactoriesName, providers);
-
-            foreach (var item in providers)
-            {
-                DbProviderFactories.RegisterFactory(item.Key, item.Value);
-            }
 
             Configuration = configuration;
         }

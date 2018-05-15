@@ -1,36 +1,258 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <DocumentationFile>bin\Debug\netcoreapp2.0\Lotech.Data.xml</DocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0-beta2</Version>
-    <PackageId>Lotech.Data.Core</PackageId>
-    <Authors>cnsicau</Authors>
-    <Company>lotech</Company>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
-    <PackageProjectUrl>https://github.com/cnsicau/Lotech.Data.Core</PackageProjectUrl>
-    <Description>Lotech.Data for dotnet core.
-a ORM like EnterpriseLib.Data.
-SqlServer Oracle MySQL SQLite etc.</Description>
-    <AssemblyVersion>2.0.0.0512</AssemblyVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AB5BE5AB-CD4D-4FBB-BDF7-FC2777D7BC6C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Lotech.Data</RootNamespace>
+    <AssemblyName>Lotech.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
-    <None Remove="database.schema.json" />
+    <Reference Include="Microsoft.Extensions.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.FileExtensions.1.0.0\lib\net451\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Json.1.0.0\lib\net451\Microsoft.Extensions.Configuration.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Physical, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Physical.1.0.0\lib\net451\Microsoft.Extensions.FileProviders.Physical.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileSystemGlobbing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileSystemGlobbing.1.0.0\lib\net451\Microsoft.Extensions.FileSystemGlobbing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.Primitives, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Primitives.4.1.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.TypeConverter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.TypeConverter.4.1.0\lib\net45\System.ComponentModel.TypeConverter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.2" />
+    <Compile Include="ColumnAttribute.cs" />
+    <Compile Include="CompositedDataReader.cs" />
+    <Compile Include="Configurations\ConfigurationManager.cs" />
+    <Compile Include="Configurations\ConnectionStringSettings.cs" />
+    <Compile Include="Configurations\ConnectionStringSettingsCollection.cs" />
+    <Compile Include="Configurations\DatabaseConfiguration.cs" />
+    <Compile Include="Configurations\DatabaseSettings.cs" />
+    <Compile Include="Configurations\DatabaseType.cs" />
+    <Compile Include="ConnectionSubstitute.cs" />
+    <Compile Include="DatabaseFactory.cs" />
+    <Compile Include="DbProviderDatabase.cs" />
+    <Compile Include="Descriptors\AttributeDescriptorFactory.cs" />
+    <Compile Include="Descriptors\EntityDescriptor.cs" />
+    <Compile Include="Descriptors\MemberDescriptor.cs" />
+    <Compile Include="Descriptors\MemberDescriptorContainer.cs" />
+    <Compile Include="Descriptors\ReflectionEntityDescriptor.cs" />
+    <Compile Include="Descriptors\ReflectionMemberDescriptor.cs" />
+    <Compile Include="EntityAttribute.cs" />
+    <Compile Include="GenericDatabase.cs" />
+    <Compile Include="Generics\DeleteOperationBuilder.cs" />
+    <Compile Include="Generics\GenericDeleteEntitiesExpression~1.cs" />
+    <Compile Include="Generics\GenericDeleteEntity~2.cs" />
+    <Compile Include="Generics\GenericEntityServices.cs" />
+    <Compile Include="Generics\GenericExistsEntityExpression~1.cs" />
+    <Compile Include="Generics\GenericExistsEntity~1.cs" />
+    <Compile Include="Generics\GenericExistsEntity~2.cs" />
+    <Compile Include="Generics\GenericFindEntitiesExpression~1.cs" />
+    <Compile Include="Generics\GenericFindEntities~1.cs" />
+    <Compile Include="Generics\GenericLoadEntityExpression~1.cs" />
+    <Compile Include="Generics\GenericLoadEntity~1.cs" />
+    <Compile Include="Generics\GenericLoadEntity~2.cs" />
+    <Compile Include="Generics\InsertOperationBuilder.cs" />
+    <Compile Include="Generics\UpdateOperationBuilder.cs" />
+    <Compile Include="IDatabase.cs" />
+    <Compile Include="IEntityServices.cs" />
+    <Compile Include="IOperationProvider.cs" />
+    <Compile Include="MySqlDatabase.cs" />
+    <Compile Include="MySqls\DeleteOperationBuilder.cs" />
+    <Compile Include="MySqls\InsertOperationBuilder.cs" />
+    <Compile Include="MySqls\MySqlDeleteEntitiesExpression~1.cs" />
+    <Compile Include="MySqls\MySqlDeleteEntity~2.cs" />
+    <Compile Include="MySqls\MySqlEntityServices.cs" />
+    <Compile Include="MySqls\MySqlExistsEntityExpression~1.cs" />
+    <Compile Include="MySqls\MySqlExistsEntity~1.cs" />
+    <Compile Include="MySqls\MySqlExistsEntity~2.cs" />
+    <Compile Include="MySqls\MySqlExpressionVisitor.cs" />
+    <Compile Include="MySqls\MySqlFindEntitiesExpression~1.cs" />
+    <Compile Include="MySqls\MySqlFindEntities~1.cs" />
+    <Compile Include="MySqls\MySqlLoadEntityExpression~1.cs" />
+    <Compile Include="MySqls\MySqlLoadEntity~1.cs" />
+    <Compile Include="MySqls\MySqlLoadEntity~2.cs" />
+    <Compile Include="MySqls\UpdateOperationBuilder.cs" />
+    <Compile Include="Operations\BuildableOperationProvider.cs" />
+    <Compile Include="Operations\Common\CommonDeleteEntitiesExpression.cs" />
+    <Compile Include="Operations\Common\CommonDeleteEntity~2.cs" />
+    <Compile Include="Operations\Common\CommonDeleteOperationBuilder.cs" />
+    <Compile Include="Operations\Common\CommonExistsEntityExpression.cs" />
+    <Compile Include="Operations\Common\CommonExistsEntity~1.cs" />
+    <Compile Include="Operations\Common\CommonExistsEntity~2.cs" />
+    <Compile Include="Operations\Common\CommonFindEntities.cs" />
+    <Compile Include="Operations\Common\CommonFindEntitiesExpression.cs" />
+    <Compile Include="Operations\Common\CommonLoadEntityExpression.cs" />
+    <Compile Include="Operations\Common\CommonLoadEntity~1.cs" />
+    <Compile Include="Operations\Common\CommonLoadEntity~2.cs" />
+    <Compile Include="Operations\ExpressionParameter.cs" />
+    <Compile Include="Operations\IExpressionNodeVisitor~2.cs" />
+    <Compile Include="Operations\IOperationBuilder.cs" />
+    <Compile Include="Operations\MemberFilters.cs" />
+    <Compile Include="Operations\Operation.cs" />
+    <Compile Include="Operations\OperationProvider~1.cs" />
+    <Compile Include="Operations\OperationProvider~2.cs" />
+    <Compile Include="Operations\SqlExpressionVisitor.cs" />
+    <Compile Include="Operations\TransactionalOperationProvider~1.cs" />
+    <Compile Include="Operations\TransactionalOperationProvider~2.cs" />
+    <Compile Include="Operations\Visitors\BinaryNodeVisitor.cs" />
+    <Compile Include="Operations\Visitors\ConstantVisitor.cs" />
+    <Compile Include="Operations\Visitors\ConvertVisitor.cs" />
+    <Compile Include="Operations\Visitors\EqualVisitor.cs" />
+    <Compile Include="Operations\Visitors\MemberVisitor.cs" />
+    <Compile Include="Operations\Visitors\NotEqualVisitor.cs" />
+    <Compile Include="Operations\Visitors\NotVisitor.cs" />
+    <Compile Include="OracleDatabase.cs" />
+    <Compile Include="Oracles\DeleteOperationBuilder.cs" />
+    <Compile Include="Oracles\InsertOperationBuilder.cs" />
+    <Compile Include="Oracles\OracleDeleteEntitiesExpression~1.cs" />
+    <Compile Include="Oracles\OracleDeleteEntity~2.cs" />
+    <Compile Include="Oracles\OracleEntityServices.cs" />
+    <Compile Include="Oracles\OracleExistsEntityExpression~1.cs" />
+    <Compile Include="Oracles\OracleExistsEntity~1.cs" />
+    <Compile Include="Oracles\OracleExistsEntity~2.cs" />
+    <Compile Include="Oracles\OracleExpressionVisitor.cs" />
+    <Compile Include="Oracles\OracleFindEntitiesExpression~1.cs" />
+    <Compile Include="Oracles\OracleFindEntities~1.cs" />
+    <Compile Include="Oracles\OracleLoadEntityExpression~1.cs" />
+    <Compile Include="Oracles\OracleLoadEntity~1.cs" />
+    <Compile Include="Oracles\OracleLoadEntity~2.cs" />
+    <Compile Include="Oracles\UpdateOperationBuilder.cs" />
+    <Compile Include="Queries\CommandQueryResult~1.cs" />
+    <Compile Include="Queries\DataReaderResultSource.cs" />
+    <Compile Include="Queries\EntityResultMapper~1.cs" />
+    <Compile Include="Queries\IRawParameterValue.cs" />
+    <Compile Include="Queries\IResultMapper~1.cs" />
+    <Compile Include="Queries\IResultSource.cs" />
+    <Compile Include="Queries\ObjectResultMapper.cs" />
+    <Compile Include="Queries\QueryResult~1.cs" />
+    <Compile Include="Queries\SimpleResultMapper~1.cs" />
+    <Compile Include="Queries\SqlQueryResult~1.cs" />
+    <Compile Include="Queries\StoredProcedureParameter~1.cs" />
+    <Compile Include="Queries\StoredProcedureQueryResult~1.cs" />
+    <Compile Include="SQLiteDatabase.cs" />
+    <Compile Include="SQLites\DeleteOperationBuilder.cs" />
+    <Compile Include="SQLites\InsertOperationBuilder.cs" />
+    <Compile Include="SQLites\SQLiteMySqlDeleteEntitiesExpression~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlDeleteEntity~2.cs" />
+    <Compile Include="SQLites\SQLiteMySqlEntityServices.cs" />
+    <Compile Include="SQLites\SQLiteMySqlExistsEntityExpression~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlExistsEntity~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlExistsEntity~2.cs" />
+    <Compile Include="SQLites\SQLiteMySqlExpressionVisitor.cs" />
+    <Compile Include="SQLites\SQLiteMySqlFindEntitiesExpression~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlFindEntities~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlLoadEntityExpression~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlLoadEntity~1.cs" />
+    <Compile Include="SQLites\SQLiteMySqlLoadEntity~2.cs" />
+    <Compile Include="SQLites\UpdateOperationBuilder.cs" />
+    <Compile Include="SqlServerDatabase.cs" />
+    <Compile Include="SqlServers\DeleteOperationBuilder.cs" />
+    <Compile Include="SqlServers\InsertOperationBuilder.cs" />
+    <Compile Include="SqlServers\SqlServerDeleteEntitiesExpression~1.cs" />
+    <Compile Include="SqlServers\SqlServerDeleteEntity~2.cs" />
+    <Compile Include="SqlServers\SqlServerEntityServices.cs" />
+    <Compile Include="SqlServers\SqlServerExistsEntityExpression~1.cs" />
+    <Compile Include="SqlServers\SqlServerExistsEntity~1.cs" />
+    <Compile Include="SqlServers\SqlServerExistsEntity~2.cs" />
+    <Compile Include="SqlServers\SqlServerExpressionVisitor.cs" />
+    <Compile Include="SqlServers\SqlServerFindEntitiesExpression~1.cs" />
+    <Compile Include="SqlServers\SqlServerFindEntities~1.cs" />
+    <Compile Include="SqlServers\SqlServerLoadEntityExpression~1.cs" />
+    <Compile Include="SqlServers\SqlServerLoadEntity~1.cs" />
+    <Compile Include="SqlServers\SqlServerLoadEntity~2.cs" />
+    <Compile Include="SqlServers\UpdateOperationBuilder.cs" />
+    <Compile Include="TransactionManager.cs" />
+    <Compile Include="TransactionScopeConnections.cs" />
+    <Compile Include="Utils\DbTypeParser.cs" />
+    <Compile Include="Utils\MemberAccessor.cs" />
+    <Compile Include="Utils\MemberAccessor~2.cs" />
+    <Compile Include="Utils\NameFormatProvider.cs" />
+    <Compile Include="Utils\StringBuilderExtensions.cs" />
+    <Compile Include="Utils\ValueConverter.cs" />
   </ItemGroup>
-
   <ItemGroup>
-    <Content Include="database.json" />
-    <Content Include="database.schema.json" />
+    <None Include="database.json" />
+    <None Include="database.schema.json" />
+    <None Include="key.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties database_1json__JSONSchema="database.schema.json" database_1schema_1json__JSONSchema="http://json.schemastore.org/xunit.runner.schema" /></VisualStudio></ProjectExtensions>
-
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

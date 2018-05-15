@@ -29,7 +29,8 @@ namespace Lotech.Data.Generics
         /// <param name="setFilter">更新字段过滤 用于仅更新与排除更新</param>
         UpdateOperationBuilder(Func<MemberDescriptor, bool> setFilter)
         {
-            _setFilter = setFilter ?? throw new ArgumentNullException(nameof(setFilter));
+            if (setFilter == null) throw new ArgumentNullException(nameof(setFilter));
+            _setFilter = setFilter;
         }
 
         Func<IDatabase, DbCommand> IOperationBuilder<Action<IDatabase, DbCommand, TEntity>>.BuildCommandProvider(EntityDescriptor descriptor)

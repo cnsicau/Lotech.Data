@@ -1,11 +1,5 @@
 ﻿{
   "$schema": "database.schema.json",
-  "dbProviderFactories": {
-    "Oracle.ManagedDataAccess.Client": "Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess",
-    "System.Data.SqlClient": "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
-    "MySql.Data.MySqlClient": "MySql.Data.MySqlClient.MySqlClientFactory, MySql.Data",
-    "Microsoft.Data.SqliteClient": "Microsoft.Data.Sqlite.SqliteFactory, Microsoft.Data.Sqlite"
-  },
   "connectionStrings": {
     "oracle": {
       "connectionString": "Data source=localhost/example; User ID=example; Password=example;",
@@ -16,12 +10,12 @@
       "providerName": "System.Data.SqlClient"
     },
     "mysql": {
-      "connectionString": "Database=example; SSL Mode=None; Data Source=example; User Id=example; Password=example",
+      "connectionString": "Database=example; SSL Mode=None; Data Source=xbook.top; Port=3393; User Id=example; Password=123456",
       "providerName": "MySql.Data.MySqlClient"
     },
     "sqlite": {
       "connectionString": "Data Source=example.db3;",
-      "providerName": "Microsoft.Data.SqliteClient"
+      "providerName": "System.Data.SqliteClient"
     },
     "generic": {
       "connectionString": "Data Source=example; User ID=sa; Password=example;Initial Catalog = Example",

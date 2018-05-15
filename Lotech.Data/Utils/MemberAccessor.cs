@@ -22,11 +22,13 @@ namespace Lotech.Data.Utils
         /// <returns></returns>
         internal static Type GetMemberValueType(MemberInfo member)
         {
-            return member.MemberType == MemberTypes.Property
+            var valueType = member.MemberType == MemberTypes.Property
                 ? ((PropertyInfo)member).PropertyType
                 : member.MemberType == MemberTypes.Field
                 ? ((FieldInfo)member).FieldType
-                : throw new NotSupportedException("仅支持实例的字段、属性判定.");
+                : null;
+            if (valueType == null) throw new NotSupportedException("仅支持实例的字段、属性判定.");
+            return valueType;
         }
 
         /// <summary>
@@ -36,11 +38,13 @@ namespace Lotech.Data.Utils
         /// <returns></returns>
         internal static bool IsStaticMember(MemberInfo member)
         {
-            return member.MemberType == MemberTypes.Property
+            bool? isStatic = member.MemberType == MemberTypes.Property
                 ? ((PropertyInfo)member).GetMethod.IsStatic
                 : member.MemberType == MemberTypes.Field
                 ? ((FieldInfo)member).IsStatic
-                : throw new NotSupportedException("仅支持实例的字段、属性判定.");
+                : default(bool?);
+            if (isStatic == null) throw new NotSupportedException("仅支持实例的字段、属性判定.");
+            return isStatic.Value;
         }
 
         /// <summary>

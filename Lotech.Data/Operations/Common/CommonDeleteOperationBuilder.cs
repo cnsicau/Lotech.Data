@@ -41,8 +41,8 @@ namespace Lotech.Data.Operations.Common
                 if (descriptor.Keys == null || descriptor.Keys.Length == 0)
                     throw new InvalidOperationException("仅支持具备主键数据表的删除操作.");
 
-                (string Name, string ParameterName)[] keys = descriptor.Keys.Select((key, index) =>
-                        (
+                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys.Select((key, index) =>
+                        new MemberDescriptorContainer<TEntity>(
                             key.Name,
                             "p_sql_" + index
                         )).ToArray();
@@ -60,10 +60,11 @@ namespace Lotech.Data.Operations.Common
 
             Action<IDatabase, DbCommand, TEntity> IOperationBuilder<Action<IDatabase, DbCommand, TEntity>>.BuildInvoker(EntityDescriptor descriptor)
             {
-                (DbType DbType, string ParameterName, Func<TEntity, object> Get)[] keys = descriptor.Keys.Select((key, index) =>
-                        (
-                            key.DbType,
+                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys.Select((key, index) =>
+                        new MemberDescriptorContainer<TEntity>(
+                            key.Name,
                              "p_sql_" + index,
+                            key.DbType,
                              Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
                         )).ToArray();
 
@@ -71,7 +72,7 @@ namespace Lotech.Data.Operations.Common
                 {
                     foreach (var key in keys)
                     {
-                        db.AddInParameter(command, db.BuildParameterName(key.ParameterName), key.DbType, key.Get(entity));
+                        db.AddInParameter(command, db.BuildParameterName(key.ParameterName), key.DbType, key.Getter(entity));
                     }
                     db.ExecuteNonQuery(command);
                 };
@@ -99,8 +100,8 @@ namespace Lotech.Data.Operations.Common
                 if (descriptor.Keys == null || descriptor.Keys.Length == 0)
                     throw new InvalidOperationException("仅支持具备主键数据表的删除操作.");
 
-                (string Name, string ParameterName)[] keys = descriptor.Keys
-                        .Select((key, index) => (key.Name, BuilderParameterName(index))).ToArray();
+                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys
+                        .Select((key, index) => new MemberDescriptorContainer<TEntity>(key.Name, BuilderParameterName(index))).ToArray();
 
                 var sql = string.Concat("DELETE FROM "
                                         , string.IsNullOrEmpty(descriptor.Schema) ? null : (quote(descriptor.Schema) + '.')
@@ -113,10 +114,11 @@ namespace Lotech.Data.Operations.Common
 
             public Action<IDatabase, DbCommand, TEntity> BuildInvoker(EntityDescriptor descriptor)
             {
-                (DbType DbType, string ParameterName, Func<TEntity, object> Get)[] keys = descriptor.Keys.Select((key, index) =>
-                           (
-                                key.DbType,
+                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys.Select((key, index) =>
+                           new MemberDescriptorContainer<TEntity>(
+                                key.Name,
                                 BuilderParameterName(index),
+                                key.DbType,
                                 Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
                            )).ToArray();
 
@@ -124,7 +126,7 @@ namespace Lotech.Data.Operations.Common
                 {
                     foreach (var key in keys)
                     {
-                        db.AddInParameter(command, key.ParameterName, key.DbType, key.Get(entity));
+                        db.AddInParameter(command, key.ParameterName, key.DbType, key.Getter(entity));
                     }
                     db.ExecuteNonQuery(command);
                 };
