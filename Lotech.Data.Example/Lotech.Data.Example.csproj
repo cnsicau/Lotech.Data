@@ -6,7 +6,6 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1895FB8B-864E-4348-970E-E989CD1C1351}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Lotech.Data.Example</RootNamespace>
     <AssemblyName>Lotech.Data.Example</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
@@ -47,9 +46,6 @@
     <Compile Include="TestEntityExecutes.cs" />
     <Compile Include="TestMethodCall.cs" />
     <Compile Include="TestSqlExecutes.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lotech.Data\Lotech.Data.csproj">
