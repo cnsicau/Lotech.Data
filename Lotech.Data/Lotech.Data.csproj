@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Lotech.Data</RootNamespace>
     <AssemblyName>Lotech.Data</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -154,6 +154,7 @@
     <Compile Include="Oracles\OracleLoadEntity~2.cs" />
     <Compile Include="Oracles\OracleUpdateEntities.cs" />
     <Compile Include="Oracles\UpdateOperationBuilder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\CommandQueryResult~1.cs" />
     <Compile Include="Queries\DataReaderResultSource.cs" />
     <Compile Include="Queries\EntityResultMapper~1.cs" />

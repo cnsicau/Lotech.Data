@@ -37,7 +37,7 @@ namespace Lotech.Data.Utils
         internal static bool IsStaticMember(MemberInfo member)
         {
             return member.MemberType == MemberTypes.Property
-                ? ((PropertyInfo)member).GetMethod.IsStatic
+                ? ((PropertyInfo)member).GetGetMethod().IsStatic
                 : member.MemberType == MemberTypes.Field
                 ? ((FieldInfo)member).IsStatic
                 : false;
