@@ -52,13 +52,11 @@ namespace Lotech.Data.Descriptors
             static IDictionary<ColumnAttribute, MemberDescriptor> GetMemberAttributes(MemberDescriptor[] members)
             {
                 return members
-                    .Select(_ => new
-                    {
-                        Attribute = Attribute.GetCustomAttribute(_.Member, typeof(ColumnAttribute)) as ColumnAttribute,
-                        Descriptor = _
-                    })
-                    .Where(_ => _.Attribute != null)
-                    .ToDictionary(_ => _.Attribute, _ => (MemberDescriptor)_.Descriptor);
+                    .Select(_ => new KeyValuePair<ColumnAttribute, MemberDescriptor>(
+                        Attribute.GetCustomAttribute(_.Member, typeof(ColumnAttribute)) as ColumnAttribute,
+                         _))
+                    .Where(_ => _.Key != null)
+                    .ToDictionary(_ => _.Key, _ => _.Value);
             }
 
 

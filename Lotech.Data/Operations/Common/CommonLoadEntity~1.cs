@@ -51,11 +51,10 @@ namespace Lotech.Data.Operations.Common
                     throw new InvalidOperationException("仅支持具备主键数据表的加载操作.");
 
                 var keys = descriptor.Keys.Select((key, index) =>
-                        new MemberDescriptorContainer<TEntity>
-                        (
+                        new MemberTuple<TEntity>(
                             quote(key.Name),
-                            buildParameter("p_sql_" + index),
                             key.DbType,
+                            buildParameter("p_sql_" + index),
                             Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
                         )).ToArray();
 
@@ -88,13 +87,12 @@ namespace Lotech.Data.Operations.Common
                     throw new InvalidOperationException("仅支持具备主键数据表的加载操作.");
 
                 var keys = descriptor.Keys.Select((key, index) =>
-                        new
-                        {
+                         new MemberTuple<TEntity>(
                             key.Name,
                             key.DbType,
-                            ParameterName = "p_sql_" + index,
-                            Get = Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
-                        }).ToArray();
+                            "p_sql_" + index,
+                            Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
+                        )).ToArray();
                 return (db, entity) =>
                 {
                     var sql = string.Concat("SELECT "
@@ -109,7 +107,7 @@ namespace Lotech.Data.Operations.Common
                     {
                         foreach (var key in keys)
                         {
-                            db.AddInParameter(command, db.BuildParameterName(key.ParameterName), key.DbType, key.Get(entity));
+                            db.AddInParameter(command, db.BuildParameterName(key.ParameterName), key.DbType, key.Getter(entity));
                         }
                         return db.ExecuteEntity<TEntity>(command);
                     }

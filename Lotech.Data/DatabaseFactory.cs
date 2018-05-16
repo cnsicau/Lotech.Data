@@ -17,7 +17,7 @@ namespace Lotech.Data
         /// <returns></returns>
         public static IDatabase CreateDatabase()
         {
-            var settings = ConfigurationManager.DatabaseSettings;
+            var settings = DatabaseConfiguration.Current?.DatabaseSettings;
             if (settings == null)
                 throw new InvalidProgramException("missing defaultDatabase");
 
@@ -35,7 +35,7 @@ namespace Lotech.Data
         /// <returns></returns>
         public static IDatabase CreateDatabase(string connectionName)
         {
-            var connectionSettings = ConfigurationManager.ConnectionStrings[connectionName];
+            var connectionSettings = DatabaseConfiguration.Current?.ConnectionStrings[connectionName];
             if (connectionSettings == null)
                 throw new InvalidOperationException("未找到默认连接: " + connectionName);
 
@@ -66,7 +66,7 @@ namespace Lotech.Data
         public static IDatabase CreateDatabase(ConnectionStringSettings connectionSettings)
         {
             IDatabase db;
-            var provider = DbProviderFactories.GetFactory(connectionSettings.ProviderName);
+            var provider = Configurations.DbProviderFactories.GetFactory(connectionSettings.ProviderName);
             var databaseType = connectionSettings.Type;
             if (databaseType == DatabaseType.Default)
             {

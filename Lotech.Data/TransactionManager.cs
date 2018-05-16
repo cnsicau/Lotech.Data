@@ -71,7 +71,7 @@ namespace Lotech.Data
             }
             else // 存在父管理器时向上使用
             {
-                var parentManager = transactionManagers.Peek();
+                parentManager = transactionManagers.Peek();
                 // 继承上级
                 id = parentManager.id;
                 transactions = parentManager.transactions;
@@ -132,13 +132,11 @@ namespace Lotech.Data
             var keys = transactions.Keys.ToArray();
             foreach (var key in keys)
             {
-                DbTransaction transaction;
-                if (transactions.TryGetValue(key, out transaction)
-                    && transactions.Remove(key))
-                    using (transaction)
-                    {
-                        transaction.Commit();
-                    }
+                using (var transaction = transactions[key])
+                {
+                    transactions.Remove(key);
+                    transaction.Commit();
+                }
             }
         }
         #endregion
@@ -151,9 +149,7 @@ namespace Lotech.Data
         {
             get
             {
-                return transactionManagers != null
-                    && transactionManagers.Count > 0
-                    ? transactionManagers.Peek() : null;
+                return transactionManagers?.Count > 0 ? transactionManagers.Peek() : null;
             }
         }
 
@@ -191,23 +187,21 @@ namespace Lotech.Data
                     var keys = transactions.Keys.ToArray();
                     foreach (var key in keys)
                     {
-                        DbTransaction transaction;
-                        if (transactions.TryGetValue(key, out transaction)
-                            && transactions.Remove(key))
-                            using (transaction)
-                            {
-                                transaction.Rollback();
-                            }
+                        using (var transaction = transactions[key])
+                        {
+                            transactions.Remove(key);
+                            transaction.Rollback();
+                        }
                     }
                 }
                 finally
                 {
-                    Completed?.Invoke(this, EventArgs.Empty);
-
-                    transactionManagers?.Pop();
-                    if (transactionManagers?.Count == 0)
+                    transactionManagers.Pop();
+                    if (transactionManagers.Count == 0)
                         transactionManagers = null;
                 }
+
+                Completed?.Invoke(this, EventArgs.Empty);
             }
         }
         #endregion

@@ -20,13 +20,13 @@ namespace Lotech.Data.Descriptors
             if (member == null) throw new ArgumentNullException(nameof(member));
             Member = member;
 
-            Type = member.MemberType == MemberTypes.Field
+            var type = member.MemberType == MemberTypes.Field
                 ? ((FieldInfo)member).FieldType
                 : member.MemberType == MemberTypes.Property
                 ? ((PropertyInfo)member).PropertyType
                 : null;
-            if (Type == null) throw new NotSupportedException("invalid member type :" + member.MemberType);
-
+            if (type == null) throw new NotSupportedException("invalid member type :" + member.MemberType);
+            Type = type;
             Name = member.Name;
             DbType = DbTypeParser.Parse(Type);
             DbGenerated = false;

@@ -19,8 +19,9 @@ namespace Lotech.Data
         /// <param name="name"></param>
         public EntityAttribute(string name)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            Name = name;
+            if(name  == null) throw new ArgumentNullException(nameof(name));
+            Name  = name ;
+
         }
 
         /// <summary>
@@ -30,11 +31,12 @@ namespace Lotech.Data
         /// <param name="name"></param>
         public EntityAttribute(string schema, string name)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (schema == null) throw new ArgumentNullException(nameof(schema));
+            if(schema  == null) throw new ArgumentNullException(nameof(schema));
+            Schema  = schema ;
 
-            Name = name;
-            Schema = schema;
+            if(name  == null) throw new ArgumentNullException(nameof(name));
+            Name  = name ;
+
         }
 
         /// <summary>

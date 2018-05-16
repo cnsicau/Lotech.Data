@@ -22,13 +22,11 @@ namespace Lotech.Data.Utils
         /// <returns></returns>
         internal static Type GetMemberValueType(MemberInfo member)
         {
-            var valueType = member.MemberType == MemberTypes.Property
+            return member.MemberType == MemberTypes.Property
                 ? ((PropertyInfo)member).PropertyType
                 : member.MemberType == MemberTypes.Field
                 ? ((FieldInfo)member).FieldType
-                : null;
-            if (valueType == null) throw new NotSupportedException("仅支持实例的字段、属性判定.");
-            return valueType;
+                : typeof(void);
         }
 
         /// <summary>
@@ -38,13 +36,11 @@ namespace Lotech.Data.Utils
         /// <returns></returns>
         internal static bool IsStaticMember(MemberInfo member)
         {
-            bool? isStatic = member.MemberType == MemberTypes.Property
+            return member.MemberType == MemberTypes.Property
                 ? ((PropertyInfo)member).GetMethod.IsStatic
                 : member.MemberType == MemberTypes.Field
                 ? ((FieldInfo)member).IsStatic
-                : default(bool?);
-            if (isStatic == null) throw new NotSupportedException("仅支持实例的字段、属性判定.");
-            return isStatic.Value;
+                : false;
         }
 
         /// <summary>
@@ -112,6 +108,39 @@ namespace Lotech.Data.Utils
                         )
                     , entity, value).Compile();
             });
+        }
+
+        /// <summary>
+        /// 获取将 source.Member 赋值给 target.Member 方法
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="member"></param>
+        /// <returns>(source, target) => target.Member = source.Member; </returns>
+        static public Action<TEntity, TEntity> GetAssign<TEntity>(MemberInfo member) where TEntity : class
+        {
+            return AssignContainer<TEntity>.GetAssign(member);
+        }
+
+        class AssignContainer<TEntity> where TEntity : class
+        {
+            static readonly ConcurrentDictionary<MemberInfo, Action<TEntity, TEntity>> assigns = new ConcurrentDictionary<MemberInfo, Action<TEntity, TEntity>>();
+
+            internal static Action<TEntity, TEntity> GetAssign(MemberInfo member)
+            {
+                return assigns.GetOrAdd(member, key =>
+                {
+                    var source = Expression.Parameter(typeof(TEntity));
+                    var target = Expression.Parameter(typeof(TEntity));
+
+                    return Expression.Lambda<Action<TEntity, TEntity>>(
+                            Expression.Assign(
+                                    Expression.MakeMemberAccess(target, member),
+                                    Expression.MakeMemberAccess(source, member)
+                                )
+                        , source, target).Compile();
+                });
+            }
+
         }
     }
 }

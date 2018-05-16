@@ -36,6 +36,7 @@ namespace Lotech.Data.Oracles
         {
             if (setFilter == null) throw new ArgumentNullException(nameof(setFilter));
             _setFilter = setFilter;
+
         }
 
         void Initialize(EntityDescriptor descriptor)
@@ -63,19 +64,19 @@ namespace Lotech.Data.Oracles
 
         Action<IDatabase, DbCommand, TEntity> CreateParameterBinder()
         {
-            var members = _members.Select((_, i) => new
-            {
+            var members = _members.Select((_, i) => new MemberTuple<TEntity>
+            (
                 _.Name,
-                ParameterName = BuildParameterName(i),
                 _.DbType,
-                Value = MemberAccessor<TEntity, object>.GetGetter(_.Member)
-            });
+                BuildParameterName(i),
+                MemberAccessor<TEntity, object>.GetGetter(_.Member)
+            )).ToArray();
 
             return (db, command, entity) =>
             {
                 foreach (var member in members)
                 {
-                    db.AddInParameter(command, member.ParameterName, member.DbType, member.Value(entity));
+                    db.AddInParameter(command, member.ParameterName, member.DbType, member.Getter(entity));
                 }
             };
         }
@@ -123,10 +124,10 @@ namespace Lotech.Data.Oracles
                 .Append(Quote(_descriptor.Name))
                 .Append("(")
                 .AppendJoin(", ", _members.Select((_, i) => Quote(_.Name)))
+                .AppendLine(")")
+                .Append(" VALUES (")
+                .AppendJoin(", ", _members.Select((_, i) => BuildParameterName(i)))
                 .AppendLine(")");
-            sqlBuilder.Append(" VALUES (")
-                    .AppendJoin(", ", _members.Select((_, i) => BuildParameterName(i)))
-                    .AppendLine(")");
 
             if (_outputs.Length > 0)
             {

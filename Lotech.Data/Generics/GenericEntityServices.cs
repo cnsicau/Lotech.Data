@@ -10,6 +10,16 @@ namespace Lotech.Data.Generics
     /// </summary>
     class GenericEntityServices : IEntityServices
     {
+        public Func<IDatabase, Expression<Func<EntityType, bool>>, int> CountByPredicate<EntityType>() where EntityType : class
+        {
+            return Operation<EntityType, Func<IDatabase, Expression<Func<EntityType, bool>>, int>, GenericCountEntitiesExpression<EntityType>>.Instance;
+        }
+
+        public Func<IDatabase, int> Count<EntityType>() where EntityType : class
+        {
+            return Operation<EntityType, Func<IDatabase, int>, GenericCountEntities<EntityType>>.Instance;
+        }
+
         public Action<IDatabase, IEnumerable<TEntity>> DeleteEntities<TEntity>() where TEntity : class
         {
             return Operation<TEntity, Action<IDatabase, IEnumerable<TEntity>>,
@@ -49,14 +59,14 @@ namespace Lotech.Data.Generics
             return Operation<TEntity, Func<IDatabase, Expression<Func<TEntity, bool>>, bool>, GenericExistsEntityExpression<TEntity>>.Instance;
         }
 
-        public Func<IDatabase, IEnumerable<TEntity>> FindEntities<TEntity>() where TEntity : class
+        public Func<IDatabase, TEntity[]> FindEntities<TEntity>() where TEntity : class
         {
-            return Operation<TEntity, Func<IDatabase, IEnumerable<TEntity>>, GenericFindEntities<TEntity>>.Instance;
+            return Operation<TEntity, Func<IDatabase, TEntity[]>, GenericFindEntities<TEntity>>.Instance;
         }
 
-        public Func<IDatabase, Expression<Func<TEntity, bool>>, IEnumerable<TEntity>> FindEntitiesByPredicate<TEntity>() where TEntity : class
+        public Func<IDatabase, Expression<Func<TEntity, bool>>, TEntity[]> FindEntitiesByPredicate<TEntity>() where TEntity : class
         {
-            return Operation<TEntity, Func<IDatabase, Expression<Func<TEntity, bool>>, IEnumerable<TEntity>>, GenericFindEntitiesExpression<TEntity>>.Instance;
+            return Operation<TEntity, Func<IDatabase, Expression<Func<TEntity, bool>>, TEntity[]>, GenericFindEntitiesExpression<TEntity>>.Instance;
         }
 
         public Action<IDatabase, IEnumerable<TEntity>> InsertEntities<TEntity>() where TEntity : class
@@ -132,6 +142,14 @@ namespace Lotech.Data.Generics
             return Operation<TEntity, Action<IDatabase, TEntity>,
                     OperationProvider<TEntity>.Instance<UpdateOperationBuilder<TEntity>.Include<TInclude>>
                 >.Instance;
+        }
+
+        public Action<IDatabase, EntityType, Expression<Func<EntityType, bool>>> UpdateEntities<EntityType, TSet>()
+            where EntityType : class
+            where TSet : class
+        {
+            return Operation<EntityType, Action<IDatabase, EntityType, Expression<Func<EntityType, bool>>>,
+                    GenericUpdateEntities<EntityType, TSet>>.Instance;
         }
     }
 }

@@ -1,66 +1,34 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Data.Common;
+﻿using System;
 
 namespace Lotech.Data.Configurations
 {
     /// <summary>
-    /// 库配置
+    /// 配置
     /// </summary>
-    class DatabaseConfiguration
+    public class DatabaseConfiguration
     {
-        /// <summary>
-        /// 库设置配置节名称
-        /// </summary>
-        internal const string DatabaseSettingsName = "databaseSettings";
-        
-        /// <summary>
-        /// 连接串配置节名称
-        /// </summary>
-        internal const string ConnectionStringsName = "connectionStrings";
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
-        public DatabaseConfiguration(string fileName)
-        {
-            FileName = fileName;
-
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile(fileName, false, false)
-                .Build();
-
-            var connections = new ConnectionStringSettingsCollection();
-            configuration.GetSection(ConnectionStringsName).Bind(connections);
-            ConnectionStrings = connections;
-
-            var settings = new DatabaseSettings();
-            configuration.GetSection(DatabaseSettingsName).Bind(settings);
-            DatabaseSettings = settings;
-
-            Configuration = configuration;
-        }
+        public DatabaseConfiguration() { }
 
         /// <summary>
         /// 连接串设置
         /// </summary>
-        public ConnectionStringSettingsCollection ConnectionStrings { get; }
+        public ConnectionStringSettingsCollection ConnectionStrings { get; set; }
 
         /// <summary>
         /// 库设置
         /// </summary>
-        public DatabaseSettings DatabaseSettings { get; }
+        public DatabaseSettings DatabaseSettings { get; set; }
+
+
+        static readonly Lazy<DatabaseConfiguration> configuration
+                = new Lazy<DatabaseConfiguration>(() => new DatabaseConfigurationSerializer().Parse("database.xml"));
 
         /// <summary>
-        /// 配置
+        /// 获取当前设置
         /// </summary>
-        public IConfiguration Configuration { get; }
-
-        /// <summary>
-        /// 配置文件名称
-        /// </summary>
-        public string FileName { get; }
+        static public DatabaseConfiguration Current { get { return configuration.Value; } }
     }
-
 }

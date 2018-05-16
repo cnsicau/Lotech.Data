@@ -52,12 +52,11 @@ namespace Lotech.Data.Operations.Common
             Func<IDatabase, TEntity, bool> IOperationProvider<Func<IDatabase, TEntity, bool>>.Create(EntityDescriptor descriptor)
             {
 
-                MemberDescriptorContainer<TEntity>[]
-                    keys = descriptor.Keys.Select((key, index) =>
-                        new MemberDescriptorContainer<TEntity>(
+                var keys = descriptor.Keys.Select((key, index) => new MemberTuple<TEntity>
+                        (
                             key.Name,
-                            buildParameter("p_sql_" + index),
                             key.DbType,
+                            buildParameter("p_sql_" + index),
                             Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
                         )).ToArray();
 
@@ -84,14 +83,13 @@ namespace Lotech.Data.Operations.Common
         {
             Func<IDatabase, TEntity, bool> IOperationProvider<Func<IDatabase, TEntity, bool>>.Create(EntityDescriptor descriptor)
             {
-                MemberDescriptorContainer<TEntity>[]
-                    keys = descriptor.Keys.Select((key, index) =>
-                        new MemberDescriptorContainer<TEntity>(
-                            key.Name,
-                            "p_sql_" + index,
-                            key.DbType,
-                            Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
-                        )).ToArray();
+                var keys = descriptor.Keys.Select((key, index) => new MemberTuple<TEntity>
+                       (
+                           key.Name,
+                           key.DbType,
+                           "p_sql_" + index,
+                           Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
+                       )).ToArray();
 
                 return (db, entity) =>
                 {

@@ -1,5 +1,4 @@
 ﻿using Lotech.Data.Descriptors;
-using Lotech.Data.Operations;
 using System;
 using System.Data;
 using System.Data.Common;
@@ -41,11 +40,7 @@ namespace Lotech.Data.Operations.Common
                 if (descriptor.Keys == null || descriptor.Keys.Length == 0)
                     throw new InvalidOperationException("仅支持具备主键数据表的删除操作.");
 
-                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys.Select((key, index) =>
-                        new MemberDescriptorContainer<TEntity>(
-                            key.Name,
-                            "p_sql_" + index
-                        )).ToArray();
+                var keys = descriptor.Keys.Select((key, index) => new MemberTuple<TEntity>(key.Name, "p_sql_" + index)).ToArray();
                 return db =>
                 {
                     var sql = string.Concat("DELETE FROM "
@@ -60,11 +55,9 @@ namespace Lotech.Data.Operations.Common
 
             Action<IDatabase, DbCommand, TEntity> IOperationBuilder<Action<IDatabase, DbCommand, TEntity>>.BuildInvoker(EntityDescriptor descriptor)
             {
-                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys.Select((key, index) =>
-                        new MemberDescriptorContainer<TEntity>(
-                            key.Name,
-                             "p_sql_" + index,
+                var keys = descriptor.Keys.Select((key, index) => new MemberTuple<TEntity>(key.Name,
                             key.DbType,
+                             "p_sql_" + index,
                              Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
                         )).ToArray();
 
@@ -100,8 +93,8 @@ namespace Lotech.Data.Operations.Common
                 if (descriptor.Keys == null || descriptor.Keys.Length == 0)
                     throw new InvalidOperationException("仅支持具备主键数据表的删除操作.");
 
-                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys
-                        .Select((key, index) => new MemberDescriptorContainer<TEntity>(key.Name, BuilderParameterName(index))).ToArray();
+                var keys = descriptor.Keys
+                        .Select((key, index) => new MemberTuple<TEntity>(key.Name, BuilderParameterName(index))).ToArray();
 
                 var sql = string.Concat("DELETE FROM "
                                         , string.IsNullOrEmpty(descriptor.Schema) ? null : (quote(descriptor.Schema) + '.')
@@ -114,11 +107,9 @@ namespace Lotech.Data.Operations.Common
 
             public Action<IDatabase, DbCommand, TEntity> BuildInvoker(EntityDescriptor descriptor)
             {
-                MemberDescriptorContainer<TEntity>[] keys = descriptor.Keys.Select((key, index) =>
-                           new MemberDescriptorContainer<TEntity>(
-                                key.Name,
-                                BuilderParameterName(index),
+                var keys = descriptor.Keys.Select((key, index) => new MemberTuple<TEntity>(key.Name,
                                 key.DbType,
+                                BuilderParameterName(index),
                                 Utils.MemberAccessor<TEntity, object>.GetGetter(key.Member)
                            )).ToArray();
 

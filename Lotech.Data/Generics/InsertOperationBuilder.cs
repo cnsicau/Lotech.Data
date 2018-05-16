@@ -1,7 +1,7 @@
 ﻿using Lotech.Data.Descriptors;
 using Lotech.Data.Operations;
+using Lotech.Data.Utils;
 using System;
-using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace Lotech.Data.Generics
 {
     class InsertOperationBuilder<TEntity> : IOperationBuilder<Action<IDatabase, DbCommand, TEntity>> where TEntity : class
     {
-        MemberDescriptorContainer<TEntity>[] members;
+        MemberTuple<TEntity>[] members;
         EntityDescriptor descriptor;
 
         void Initialize(EntityDescriptor descriptor)
@@ -18,9 +18,9 @@ namespace Lotech.Data.Generics
             if (this.descriptor == descriptor) return;
             this.descriptor = descriptor;
             members = descriptor.Members.Where(_ => !_.DbGenerated) // 忽略库中生成的属性
-                .Select((member, index) => new MemberDescriptorContainer<TEntity>(member.Name,
-                           "p_sql_" + index,
+                .Select((member, index) => new MemberTuple<TEntity>(member.Name,
                           member.DbType,
+                           "p_sql_" + index,
                           Utils.MemberAccessor<TEntity, object>.GetGetter(member.Member)
                         )).ToArray();
 
